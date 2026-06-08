@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>野球肩コンディション入力</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Baseball Shoulder Log</p>
+          <h1>野球肩コンディション入力</h1>
+          <p class="lead">
+            投球時の肩の痛み、違和感、可動域、危険サインを短時間で記録し、受診相談や復帰判断の材料を整理します。
+          </p>
+        </div>
+        <div class="hero-panel" aria-label="現在の評価サマリー">
+          <span class="status-dot"></span>
+          <p id="heroSummary">入力するとリスク目安を表示します</p>
+        </div>
+      </section>
+
+      <section class="notice">
+        このアプリは診断ツールではありません。強い痛み、しびれ、脱力、夜間痛、外傷後の痛みがある場合は、投球を中止して医療機関へ相談してください。
+      </section>
+
+      <div class="layout">
+        <form id="assessmentForm" class="form-card">
+          <div class="section-heading">
+            <h2>基本情報</h2>
+            <button class="ghost-button" type="button" id="resetButton">リセット</button>
+          </div>
+
+          <div class="grid two">
+            <label>
+              選手名
+              <input id="playerName" name="playerName" type="text" placeholder="例: 山田 太郎">
+            </label>
+            <label>
+              記録日
+              <input id="recordDate" name="recordDate" type="date">
+            </label>
+            <label>
+              学年・カテゴリ
+              <select id="category" name="category">
+                <option value="小学生">小学生</option>
+                <option value="中学生">中学生</option>
+                <option value="高校生">高校生</option>
+                <option value="大学・社会人">大学・社会人</option>
+                <option value="その他">その他</option>
+              </select>
+            </label>
+            <label>
+              ポジション
+              <select id="position" name="position">
+                <option value="投手">投手</option>
+                <option value="捕手">捕手</option>
+                <option value="内野手">内野手</option>
+                <option value="外野手">外野手</option>
+                <option value="その他">その他</option>
+              </select>
+            </label>
+          </div>
+
+          <h2>痛み・違和感</h2>
+          <div class="grid two">
+            <label>
+              安静時痛
+              <input id="restPain" name="restPain" type="range" min="0" max="10" value="0">
+              <span class="range-value" data-for="restPain">0</span>
+            </label>
+            <label>
+              投球時痛
+              <input id="throwPain" name="throwPain" type="range" min="0" max="10" value="0">
+              <span class="range-value" data-for="throwPain">0</span>
+            </label>
+            <label>
+              翌日痛
+              <input id="nextDayPain" name="nextDayPain" type="range" min="0" max="10" value="0">
+              <span class="range-value" data-for="nextDayPain">0</span>
+            </label>
+            <label>
+              肩の重だるさ
+              <input id="fatigue" name="fatigue" type="range" min="0" max="10" value="0">
+              <span class="range-value" data-for="fatigue">0</span>
+            </label>
+          </div>
+
+          <fieldset>
+            <legend>痛む部位</legend>
+            <div class="chips">
+              <label><input type="checkbox" name="painArea" value="肩前方">肩前方</label>
+              <label><input type="checkbox" name="painArea" value="肩後方">肩後方</label>
+              <label><input type="checkbox" name="painArea" value="肩上部">肩上部</label>
+              <label><input type="checkbox" name="painArea" value="腕の外側">腕の外側</label>
+              <label><input type="checkbox" name="painArea" value="肩甲骨周囲">肩甲骨周囲</label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>痛みが出る投球フェーズ</legend>
+            <div class="chips">
+              <label><input type="checkbox" name="phase" value="腕を上げる時">腕を上げる時</label>
+              <label><input type="checkbox" name="phase" value="トップ">トップ</label>
+              <label><input type="checkbox" name="phase" value="加速期">加速期</label>
+              <label><input type="checkbox" name="phase" value="リリース">リリース</label>
+              <label><input type="checkbox" name="phase" value="フォロー">フォロー</label>
+              <label><input type="checkbox" name="phase" value="投球後">投球後</label>
+            </div>
+          </fieldset>
+
+          <h2>機能・危険サイン</h2>
+          <div class="grid two">
+            <label>
+              肩の上げにくさ
+              <select id="raiseDifficulty" name="raiseDifficulty">
+                <option value="なし">なし</option>
+                <option value="少しある">少しある</option>
+                <option value="明らかにある">明らかにある</option>
+              </select>
+            </label>
+            <label>
+              球速・出力低下
+              <select id="performanceDrop" name="performanceDrop">
+                <option value="なし">なし</option>
+                <option value="少しある">少しある</option>
+                <option value="明らかにある">明らかにある</option>
+              </select>
+            </label>
+          </div>
+
+          <fieldset>
+            <legend>整形外科テスト</legend>
+            <div class="test-grid">
+              <label>
+                CAT
+                <select name="orthoTest_CAT">
+                  <option value="未実施">未実施</option>
+                  <option value="陰性">陰性</option>
+                  <option value="陽性">陽性</option>
+                  <option value="疼痛のみ">疼痛のみ</option>
+                  <option value="判定困難">判定困難</option>
+                </select>
+              </label>
+              <label>
+                HFT
+                <select name="orthoTest_HFT">
+                  <option value="未実施">未実施</option>
+                  <option value="陰性">陰性</option>
+                  <option value="陽性">陽性</option>
+                  <option value="疼痛のみ">疼痛のみ</option>
+                  <option value="判定困難">判定困難</option>
+                </select>
+              </label>
+              <label>
+                O'B
+                <select name="orthoTest_OB">
+                  <option value="未実施">未実施</option>
+                  <option value="陰性">陰性</option>
+                  <option value="陽性">陽性</option>
+                  <option value="疼痛のみ">疼痛のみ</option>
+                  <option value="判定困難">判定困難</option>
+                </select>
+              </label>
+              <label>
+                Hawkins
+                <select name="orthoTest_Hawkins">
+                  <option value="未実施">未実施</option>
+                  <option value="陰性">陰性</option>
+                  <option value="陽性">陽性</option>
+                  <option value="疼痛のみ">疼痛のみ</option>
+                  <option value="判定困難">判定困難</option>
+                </select>
+              </label>
+              <label>
+                HERT
+                <select name="orthoTest_HERT">
+                  <option value="未実施">未実施</option>
+                  <option value="陰性">陰性</option>
+                  <option value="陽性">陽性</option>
+                  <option value="疼痛のみ">疼痛のみ</option>
+                  <option value="判定困難">判定困難</option>
+                </select>
+              </label>
+              <label>
+                ISP-t
+                <select name="orthoTest_ISPt">
+                  <option value="未実施">未実施</option>
+                  <option value="陰性">陰性</option>
+                  <option value="陽性">陽性</option>
+                  <option value="疼痛のみ">疼痛のみ</option>
+                  <option value="判定困難">判定困難</option>
+                </select>
+              </label>
+              <label>
+                belly press
+                <select name="orthoTest_bellyPress">
+                  <option value="未実施">未実施</option>
+                  <option value="陰性">陰性</option>
+                  <option value="陽性">陽性</option>
+                  <option value="疼痛のみ">疼痛のみ</option>
+                  <option value="判定困難">判定困難</option>
+                </select>
+              </label>
+              <label>
+                lift off
+                <select name="orthoTest_liftOff">
+                  <option value="未実施">未実施</option>
+                  <option value="陰性">陰性</option>
+                  <option value="陽性">陽性</option>
+                  <option value="疼痛のみ">疼痛のみ</option>
+                  <option value="判定困難">判定困難</option>
+                </select>
+              </label>
+            </div>
+          </fieldset>
+
+          <h2>肩甲骨評価</h2>
+          <fieldset>
+            <legend>肩甲骨機能評価</legend>
+            <div class="test-grid">
+              <label>
+                EBP
+                <select name="scapFunction_EBP">
+                  <option value="未実施">未実施</option>
+                  <option value="正常">正常</option>
+                  <option value="低下">低下</option>
+                  <option value="疼痛あり">疼痛あり</option>
+                  <option value="判定困難">判定困難</option>
+                </select>
+              </label>
+              <label>
+                僧帽筋中部
+                <select name="scapFunction_midTrap">
+                  <option value="未実施">未実施</option>
+                  <option value="正常">正常</option>
+                  <option value="低下">低下</option>
+                  <option value="疼痛あり">疼痛あり</option>
+                  <option value="判定困難">判定困難</option>
+                </select>
+              </label>
+              <label>
+                僧帽筋下部
+                <select name="scapFunction_lowTrap">
+                  <option value="未実施">未実施</option>
+                  <option value="正常">正常</option>
+                  <option value="低下">低下</option>
+                  <option value="疼痛あり">疼痛あり</option>
+                  <option value="判定困難">判定困難</option>
+                </select>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>肩甲骨アライメント</legend>
+            <div class="test-grid">
+              <label>
+                挙上 / 下制
+                <select name="scapAlignment_elevation">
+                  <option value="正常">正常</option>
+                  <option value="挙上">挙上</option>
+                  <option value="下制">下制</option>
+                  <option value="左右差あり">左右差あり</option>
+                  <option value="判定困難">判定困難</option>
+                </select>
+              </label>
+              <label>
+                外転 / 内転
+                <select name="scapAlignment_abduction">
+                  <option value="正常">正常</option>
+                  <option value="外転">外転</option>
+                  <option value="内転">内転</option>
+                  <option value="左右差あり">左右差あり</option>
+                  <option value="判定困難">判定困難</option>
+                </select>
+              </label>
+              <label>
+                上方回旋 / 下方回旋
+                <select name="scapAlignment_rotation">
+                  <option value="正常">正常</option>
+                  <option value="上方回旋">上方回旋</option>
+                  <option value="下方回旋">下方回旋</option>
+                  <option value="左右差あり">左右差あり</option>
+                  <option value="判定困難">判定困難</option>
+                </select>
+              </label>
+              <label>
+                前傾 / 後傾
+                <select name="scapAlignment_tilt">
+                  <option value="正常">正常</option>
+                  <option value="前傾">前傾</option>
+                  <option value="後傾">後傾</option>
+                  <option value="左右差あり">左右差あり</option>
+                  <option value="判定困難">判定困難</option>
+                </select>
+              </label>
+            </div>
+          </fieldset>
+
+          <h2>体幹機能</h2>
+          <fieldset>
+            <legend>体幹機能評価</legend>
+            <div class="test-grid">
+              <label>
+                腹斜筋 左
+                <select name="trunk_obliqueLeft">
+                  <option value="未実施">未実施</option>
+                  <option value="正常">正常</option>
+                  <option value="低下">低下</option>
+                  <option value="疼痛あり">疼痛あり</option>
+                  <option value="判定困難">判定困難</option>
+                </select>
+              </label>
+              <label>
+                腹斜筋 右
+                <select name="trunk_obliqueRight">
+                  <option value="未実施">未実施</option>
+                  <option value="正常">正常</option>
+                  <option value="低下">低下</option>
+                  <option value="疼痛あり">疼痛あり</option>
+                  <option value="判定困難">判定困難</option>
+                </select>
+              </label>
+            </div>
+            <div class="grid two range-grid">
+              <label>
+                トランクローテーション
+                <input id="trunkRotation" name="trunkRotation" type="range" min="0" max="110" value="110">
+                <span class="range-value wide" data-for="trunkRotation">110°</span>
+              </label>
+              <label>
+                広背筋テスト
+                <input id="latTest" name="latTest" type="range" min="0" max="80" value="80">
+                <span class="range-value wide" data-for="latTest">80°</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="danger-box">
+            <legend>危険サイン</legend>
+            <div class="checks">
+              <label><input type="checkbox" name="redFlag" value="夜間痛">夜間痛がある</label>
+              <label><input type="checkbox" name="redFlag" value="しびれ">腕や手にしびれがある</label>
+              <label><input type="checkbox" name="redFlag" value="脱力">力が入りにくい</label>
+              <label><input type="checkbox" name="redFlag" value="外傷">転倒・衝突など外傷後の痛み</label>
+              <label><input type="checkbox" name="redFlag" value="腫れ・熱感">腫れや熱感がある</label>
+            </div>
+          </fieldset>
+
+          <label>
+            メモ
+            <textarea id="memo" name="memo" rows="4" placeholder="投球数、練習内容、いつから痛いか、ケア内容など"></textarea>
+          </label>
+
+          <div class="actions">
+            <button type="submit">記録を保存</button>
+            <button type="button" class="secondary-button" id="exportButton">CSV出力</button>
+          </div>
+        </form>
+
+        <aside class="result-panel">
+          <div class="score-card" id="scoreCard">
+            <p class="eyebrow">Risk Score</p>
+            <strong id="scoreValue">0</strong>
+            <span id="riskLabel">入力待ち</span>
+          </div>
+
+          <div class="advice-card">
+            <h2>評価メモ</h2>
+            <ul id="adviceList">
+              <li>痛みの程度と危険サインを入力してください。</li>
+            </ul>
+          </div>
+
+          <div class="history-card">
+            <div class="section-heading">
+              <h2>保存履歴</h2>
+              <button class="ghost-button" type="button" id="clearHistoryButton">履歴削除</button>
+            </div>
+            <div id="historyList" class="history-list"></div>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
