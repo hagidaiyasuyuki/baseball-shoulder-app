@@ -98,6 +98,10 @@ exportButton.addEventListener("click", () => {
     "腹斜筋右",
     "トランクローテーション",
     "広背筋テスト",
+    "股関節内旋左",
+    "股関節内旋右",
+    "股関節外旋左",
+    "股関節外旋右",
     "危険サイン",
     "メモ",
   ];
@@ -121,6 +125,10 @@ exportButton.addEventListener("click", () => {
     record.trunk?.obliqueRight || "",
     record.trunk ? `${record.trunk.trunkRotation}°` : "",
     record.trunk ? `${record.trunk.latTest}°` : "",
+    record.hip ? `${record.hip.internalLeft}°` : "",
+    record.hip ? `${record.hip.internalRight}°` : "",
+    record.hip ? `${record.hip.externalLeft}°` : "",
+    record.hip ? `${record.hip.externalRight}°` : "",
     record.redFlags.join(" / "),
     record.memo,
   ]);
@@ -159,6 +167,12 @@ function buildAssessment() {
       obliqueRight: data.get("trunk_obliqueRight"),
       trunkRotation: Number(data.get("trunkRotation")),
       latTest: Number(data.get("latTest")),
+    },
+    hip: {
+      internalLeft: Number(data.get("hipInternalLeft")),
+      internalRight: Number(data.get("hipInternalRight")),
+      externalLeft: Number(data.get("hipExternalLeft")),
+      externalRight: Number(data.get("hipExternalRight")),
     },
     painAreas: data.getAll("painArea"),
     phases: data.getAll("phase"),
@@ -305,6 +319,11 @@ function getAdvice(values, score) {
   if (values.trunk.trunkRotation < 90 || values.trunk.latTest < 65) {
     advice.push(`体幹・広背筋の可動性: トランクローテーション ${values.trunk.trunkRotation}°、広背筋テスト ${values.trunk.latTest}°。肩だけでなく胸郭・体幹の制限も経過記録に含めましょう。`);
   }
+  const hipInternalDifference = Math.abs(values.hip.internalLeft - values.hip.internalRight);
+  const hipExternalDifference = Math.abs(values.hip.externalLeft - values.hip.externalRight);
+  if (hipInternalDifference >= 10 || hipExternalDifference >= 10) {
+    advice.push(`股関節可動域の左右差: 内旋 左 ${values.hip.internalLeft}° / 右 ${values.hip.internalRight}°、外旋 左 ${values.hip.externalLeft}° / 右 ${values.hip.externalRight}°。投球動作との関連を経過記録に残しましょう。`);
+  }
   if (values.phases.includes("トップ") || values.phases.includes("加速期")) {
     advice.push("トップから加速期の痛みは肩への負荷が高い場面です。フォーム、肩甲骨、胸郭、股関節の連動も記録対象にすると役立ちます。");
   }
@@ -339,7 +358,15 @@ function updateAssessment() {
 
 function updateRangeLabel(input) {
   const label = document.querySelector(`[data-for="${input.id}"]`);
-  const suffix = input.id === "trunkRotation" || input.id === "latTest" ? "°" : "";
+  const angleInputs = [
+    "trunkRotation",
+    "latTest",
+    "hipInternalLeft",
+    "hipInternalRight",
+    "hipExternalLeft",
+    "hipExternalRight",
+  ];
+  const suffix = angleInputs.includes(input.id) ? "°" : "";
   label.textContent = `${input.value}${suffix}`;
 }
 
@@ -379,6 +406,9 @@ function formatHistoryFindings(record) {
 
   if (record.trunk) {
     findings.push(`TrRot:${record.trunk.trunkRotation}° Lat:${record.trunk.latTest}°`);
+  }
+  if (record.hip) {
+    findings.push(`Hip IR L:${record.hip.internalLeft}° R:${record.hip.internalRight}° ER L:${record.hip.externalLeft}° R:${record.hip.externalRight}°`);
   }
 
   return findings.join(" / ") || "追加評価記録なし";
